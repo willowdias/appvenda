@@ -1,0 +1,148 @@
+JanelnaGerenciado:
+    Janelaprincipal:
+    Janela1:
+    ListaPRoduto:
+<Janelaprincipal>:
+    name:"janelaprincipal"
+    MDFloatLayout:
+        
+        BoxLayout:
+            orientation: "vertical"
+		    size: root.width, root.height
+            spacing:10
+            padding:10
+            MDTopAppBar:
+                title:"INICIAL"
+                left_action_items:[["menu",lambda x:root.open_popup()]]
+                right_action_items:[["dots-vertical",lambda x:root.open_popup()]]
+                pos_hint: {"center_y":0.95}
+                elevation:1
+            Image:
+                source: "venda.png"
+                allow_stretch:True
+            MDLabel:
+      
+                id:labelogin
+                #md_bg_color:1, 0, 3, 1
+                text: "Login"
+                halign: "center"
+                size_hint:1,None
+                font_size: 15
+             
+            MDTextField:
+                id: login
+                icon_left:"account"
+                hint_text: "Login"
+                multiline: False
+                size_hint: (1, .4)
+                line_color_focus: 1, 0, 0, 1
+                line_color_normal: 0, 0, 1, 1
+                text_color: 1, 1, 1, 1  # white text color
+            MDTextField:
+                id: senha
+                icon_left:"eye-off"
+                password: True
+                hint_text: "senha"
+                helper_text_mode: "on_focus"
+                multiline: False
+                size_hint: (1, .4)
+            
+            MDRectangleFlatButton:
+                text: "logar"
+                size_hint: 0.3, 0.2
+                width: "200dp"
+                font_size: "18sp"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.80}
+                on_press: 
+                    #app.root.current = 'janela1'
+                    root.logar()
+<Janela1>:#tela logado
+    name:"janela1"
+    MDFloatLayout:
+        BoxLayout:
+            orientation: "vertical"
+		    size: root.width, root.height
+            spacing:10
+            padding:10
+            MDTopAppBar:
+                title:"Logado"
+                #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
+                left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_y":0.95}
+                elevation:1
+            MDLabel:
+                id: label
+                text: "willow"
+                halign: "center"
+                font_size: 15
+                size_hint_y:None
+                #pos_hint: {"center_x":0.45,"center_y":0.80}
+            MDTextField:
+                id: codigoproduto
+                hint_text: "codigo produto"
+                helper_text_mode: "on_focus"
+                multiline: False
+                size_hint: (1, .1)
+            MDTextField:
+                id: descricaoproduto
+                #pos_hint: {"center_x":0.45,"center_y":0.65}
+                hint_text: "descricao"
+                helper_text_mode: "on_focus"
+                multiline: False
+                size_hint: (1, .1)
+            BoxLayout:
+                size_hint: (1, .3)
+                orientation: "horizontal"
+                size: root.width, root.height
+                spacing:10
+                padding:10
+               
+                MDRectangleFlatButton:
+                    text: "Adicionar Produto"
+                    halign: "center"
+
+                    width: "200dp"
+                    height: "50dp"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    on_release:
+                        root.adicionarProduto()  
+                MDRectangleFlatButton:
+                    text: "Ver Produtos"
+                    halign: "center"
+                
+                    width: "220dp"
+                    height: "50dp"
+                    pos_hint: {"center_x": 0.45, "center_y": 0.5}
+                    on_release:
+                        root.verprodutos()     
+<ListaPRoduto>:
+    name:"Produto"
+    MDBoxLayout:
+        orientation: 'vertical'
+      
+		size: root.width, root.height
+        spacing:10
+        padding:10
+        MDTopAppBar:
+            title:"produto"
+            #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
+            left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+            pos_hint: {"center_y":0.95}
+            elevation:1
+        MDTextField:
+            id: buscarPRoduto
+       
+            hint_text: "Busca produto"
+            helper_text_mode: "on_focus"
+            multiline: False
+         
+            size_hint: (1, .2)
+            
+            on_text:
+                root.buscaProduto()
+            
+        ScrollView:
+            MDList:
+                id: list_view
+                height: self.minimum_height   
+
