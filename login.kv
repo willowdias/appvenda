@@ -11,25 +11,33 @@ JanelnaGerenciado:
 		    size: root.width, root.height
             spacing:10
             padding:10
+            
             MDTopAppBar:
                 title:"INICIAL"
                 left_action_items:[["menu",lambda x:root.open_popup("menu")]]
                 right_action_items:[["dots-vertical",lambda x:root.open_popup("menu")]]
                 pos_hint: {"center_y":0.95}
                 elevation:1
+                md_bg_color: 0, 0, 2, 1
             Image:
                 source: "venda.png"
                 allow_stretch:True
             MDLabel:
-      
+                 
                 id:labelogin
                 #md_bg_color:1, 0, 3, 1
                 text: "Login"
                 halign: "center"
                 size_hint:1,None
-                font_size: 15
-             
+                font_size: 25
+            ProgressBar:
+                id: progress_bar
+                size_hint:1,None
+                value: 0
+                max: 100
+                height: dp(10) 
             MDTextField:
+                
                 id: login
                 icon_left:"account"
                 hint_text: "Login"
@@ -48,7 +56,9 @@ JanelnaGerenciado:
                 size_hint: (1, .4)
             
             MDRectangleFlatButton:
-                text: "logar"
+                text: "CONECTAR"
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 2, 1
                 size_hint: 0.3, 0.2
                 width: "200dp"
                 font_size: "18sp"
@@ -59,37 +69,79 @@ JanelnaGerenciado:
 <Janela1>:#tela logado
     name:"janela1"
     MDFloatLayout:
+        
+        md_bg_color: (0.9, 0.9, 0.9, 1.0)
+        spacing:10
+        padding:10
         BoxLayout:
             orientation: "vertical"
 		    size: root.width, root.height
             spacing:10
             padding:10
             MDTopAppBar:
-                title:"Logado"
+                title:"ADICIONAR PRODUTO"
                 #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
                 left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
                 pos_hint: {"center_y":0.95}
                 elevation:1
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 2, 1
             MDLabel:
                 id: label
                 text: "willow"
                 halign: "center"
                 font_size: 15
                 size_hint_y:None
+                text_color: (0, 0, 0, 1)
                 #pos_hint: {"center_x":0.45,"center_y":0.80}
             MDTextField:
+              
+                mode: "rectangle" # Estilo do widget, neste caso, retangular
+                
                 id: codigoproduto
-                hint_text: "codigo produto"
+                hint_text: "CODIGO*"
+                input_filter: "float"
                 helper_text_mode: "on_focus"
                 multiline: False
-                size_hint: (1, .1)
+                size_hint: (1, .0)
+                
             MDTextField:
+                mode: "rectangle"    
                 id: descricaoproduto
                 #pos_hint: {"center_x":0.45,"center_y":0.65}
-                hint_text: "descricao"
+                hint_text: "DESCRIÇAO*"
                 helper_text_mode: "on_focus"
                 multiline: False
+                size_hint: (1, .0)
+            BoxLayout:#box de venda
                 size_hint: (1, .1)
+                orientation: "horizontal"
+                spacing:10
+            
+                MDTextField:
+                    mode: "rectangle"
+                    id: quant
+                    hint_text: "QUANT*"
+                    input_filter: "float"
+                    helper_text_mode: "on_focus"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    on_text_validate:root.valquant()
+                MDTextField:
+                    mode: "rectangle"
+                    id: vlcusto
+                    hint_text: "VL CUSTO*"
+                    input_filter: "float"
+                    helper_text_mode: "on_focus"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    on_text_validate:root.valcusto()
+                MDTextField:
+                    mode: "rectangle"
+                    id: vlvendas
+                    hint_text: "VL VENDA"
+                    input_filter: "float"
+                    helper_text_mode: "on_focus"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    on_text_validate:root.valvenda()
             BoxLayout:
                 size_hint: (1, .3)
                 orientation: "horizontal"
@@ -100,7 +152,8 @@ JanelnaGerenciado:
                 MDRectangleFlatButton:
                     text: "Adicionar Produto"
                     halign: "center"
-
+                    text_color: 1, 1, 1, 1
+                    md_bg_color: 0, 0, 2, 1
                     width: "200dp"
                     height: "50dp"
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -109,7 +162,8 @@ JanelnaGerenciado:
                 MDRectangleFlatButton:
                     text: "Ver Produtos"
                     halign: "center"
-                
+                    text_color: 1, 1, 1, 1
+                    md_bg_color: 0, 0, 2, 1
                     width: "220dp"
                     height: "50dp"
                     pos_hint: {"center_x": 0.45, "center_y": 0.5}
@@ -129,6 +183,8 @@ JanelnaGerenciado:
             left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
             pos_hint: {"center_y":0.95}
             elevation:1
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0, 0, 2, 1
         MDTextField:
             id: buscarPRoduto
        
@@ -138,7 +194,7 @@ JanelnaGerenciado:
          
             size_hint: (1, .2)
             
-            on_text:
+            on_text_validate:
                 root.buscaProduto()
             
         ScrollView:

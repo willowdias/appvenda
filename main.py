@@ -8,32 +8,41 @@ from kivy.uix.scrollview import ScrollView
 from kivymd.uix.list import TwoLineListItem, MDList
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
+
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.progressbar import ProgressBar
 from kivymd.uix.button import MDRectangleFlatButton
 import os
 import sqlite3
+import time
 class JanelnaGerenciado(ScreenManager):
     pass
 class Janelaprincipal(Screen):
-        
+    
     def logar(self):
-        login=self.ids.login.text
-        senha=self.ids.senha.text
+        data = {'nome': 'willow', 'idade': 28}
+        self.manager.current = 'janela1'
+        self.manager.get_screen('janela1').atualizar_dados(data)
+        self.manager.transition.direction="left"
+        '''    
+        login=str(self.ids.login.text).lower().strip()
+        senha=str(self.ids.senha.text).lower().strip()
         conn = sqlite3.connect('app.db')
         cursor = conn.cursor()
-        cursor.execute(f'''SELECT * FROM usuario where name='{login}' and senha='{senha}' ''')
+        cursor.execute(f'SELECT * FROM usuario where name='{login}' and senha='{senha}' ')
         resultado = cursor.fetchall()
         if resultado:
             data = {'nome': 'willow', 'idade': 28}
             self.manager.current = 'janela1'
             self.manager.get_screen('janela1').atualizar_dados(data)
             self.manager.transition.direction="left"
-            self.ids.labelogin.text="LOGIN"
+      
             
         else:
             self.open_popup("usuario incorreto \n ou \n senha")
         self.ids.login.text='' 
-        self.ids.senha.text='' 
+        self.ids.senha.text='' '''
+    
     def open_popup(self,text):
         popup = Popup(title=f'{text}'.upper(),
                       size_hint=(None, None), size=(300, 400))
@@ -41,15 +50,23 @@ class Janelaprincipal(Screen):
 class Janela1(Screen):
     def __init__(self, **kwargs):
         super(Janela1, self).__init__(**kwargs)
-   
+    def valquant(self):#essa funçaomuda numero inteiro pra float
+        quant=self.ids.quant.text
+        self.ids.quant.text="{:.2f}".format(float(quant))
+    def valcusto(self):
+        vlcusto=self.ids.vlcusto.text
+        self.ids.vlcusto.text="R$ {:.2f}".format(float(vlcusto))
+    def valvenda(self):
+        vlvendas=self.ids.vlvendas.text
+        self.ids.vlvendas.text="R$ {:.2f}".format(float(vlvendas))
     def atualizar_dados(self, data):
         self.ids.label.text=f'Nome: {data["nome"]}, Idade: {data["idade"]}'
     def voltatelaprincinpal(self):
         self.manager.current = 'janelaprincipal'
         self.manager.transition.direction="right"#colcoa direçao
     def adicionarProduto(self):
-        codigo=str(self.ids.codigoproduto.text).strip()
-        descricao=str(self.ids.descricaoproduto.text).strip()
+        codigo=str(self.ids.codigoproduto.text).strip().upper()
+        descricao=str(self.ids.descricaoproduto.text).strip().upper()
         conn = sqlite3.connect('app.db')
         cursor = conn.cursor()
         if codigo=='' or descricao=='':
@@ -78,7 +95,7 @@ class ListaPRoduto(Screen):
         #def on_pre_enter(self):
             
         def buscaProduto(self):
-            busca=(self.ids.buscarPRoduto.text)
+            busca=str(self.ids.buscarPRoduto.text).upper()
             self.ids.list_view.clear_widgets()
             conn = sqlite3.connect('app.db')
             cursor = conn.cursor()
@@ -88,8 +105,8 @@ class ListaPRoduto(Screen):
             if not items:
                 self.ids.list_view.clear_widgets()
             else:
+                self.ids.list_view.clear_widgets()
                 for item in items:
-                    
                     list_item = TwoLineListItem(text=item[1], secondary_text=item[2])
                     self.ids.list_view.add_widget(list_item)
                 conn.close()
