@@ -13,8 +13,8 @@ JanelnaGerenciado:
             padding:10
             MDTopAppBar:
                 title:"INICIAL"
-                left_action_items:[["menu",lambda x:root.open_popup()]]
-                right_action_items:[["dots-vertical",lambda x:root.open_popup()]]
+                left_action_items:[["menu",lambda x:root.open_popup("menu")]]
+                right_action_items:[["dots-vertical",lambda x:root.open_popup("menu")]]
                 pos_hint: {"center_y":0.95}
                 elevation:1
             Image:
