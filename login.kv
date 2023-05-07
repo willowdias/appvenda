@@ -5,7 +5,6 @@ JanelnaGerenciado:
 <Janelaprincipal>:
     name:"janelaprincipal"
     MDFloatLayout:
-        
         BoxLayout:
             orientation: "vertical"
 		    size: root.width, root.height
@@ -13,11 +12,12 @@ JanelnaGerenciado:
             padding:10
             
             MDTopAppBar:
-                title:"INICIAL"
+                title:"INICIAL VERSAO:1"
                 left_action_items:[["menu",lambda x:root.open_popup("menu")]]
                 right_action_items:[["dots-vertical",lambda x:root.open_popup("menu")]]
                 pos_hint: {"center_y":0.95}
-                elevation:1
+                elevation: 5
+                font_size: "2sp"
                 md_bg_color: 0, 0, 2, 1
             Image:
                 source: "venda.png"
@@ -59,8 +59,8 @@ JanelnaGerenciado:
                 text: "CONECTAR"
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0, 0, 2, 1
-                size_hint: 0.3, 0.2
-                width: "200dp"
+                size_hint: 0.4, 0.2
+                width: "220dp"
                 font_size: "18sp"
                 pos_hint: {'center_x': 0.5, 'center_y': 0.80}
                 on_press: 
@@ -69,31 +69,32 @@ JanelnaGerenciado:
 <Janela1>:#tela logado
     name:"janela1"
     MDFloatLayout:
-        
-        md_bg_color: (0.9, 0.9, 0.9, 1.0)
+        orientation: 'vertical'
+		size: root.width, root.height
         spacing:10
         padding:10
+        md_bg_color: (0.9, 0.9, 0.9, 1.0)
         BoxLayout:
             orientation: "vertical"
 		    size: root.width, root.height
-            spacing:10
+            spacing:13
             padding:10
-            MDTopAppBar:
-                title:"ADICIONAR PRODUTO"
-                #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
-                left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
-                pos_hint: {"center_y":0.95}
-                elevation:1
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0, 0, 2, 1
+            
             MDLabel:
                 id: label
                 text: "willow"
                 halign: "center"
                 font_size: 15
-                size_hint_y:None
+                size_hint: (1, None)
+                elevation: 5
                 text_color: (0, 0, 0, 1)
                 #pos_hint: {"center_x":0.45,"center_y":0.80}
+            MDTopAppBar:
+                title:"CADASTRO PRODUTO"
+                left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_y":0.95}
+                elevation: 5
+                md_bg_color: 0, 0, 2, 1
             MDTextField:
               
                 mode: "rectangle" # Estilo do widget, neste caso, retangular
@@ -169,11 +170,11 @@ JanelnaGerenciado:
                     pos_hint: {"center_x": 0.45, "center_y": 0.5}
                     on_release:
                         root.verprodutos()     
+                    
 <ListaPRoduto>:
     name:"Produto"
     MDBoxLayout:
         orientation: 'vertical'
-      
 		size: root.width, root.height
         spacing:10
         padding:10
@@ -200,5 +201,6 @@ JanelnaGerenciado:
         ScrollView:
             MDList:
                 id: list_view
-                height: self.minimum_height   
-
+                height: self.minimum_height
+                multiple: True  
+                allow_empty_selection: True

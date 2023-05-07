@@ -20,16 +20,16 @@ class JanelnaGerenciado(ScreenManager):
 class Janelaprincipal(Screen):
     
     def logar(self):
-        data = {'nome': 'willow', 'idade': 28}
+        ''' data = {'nome': 'willow', 'idade': 28}
         self.manager.current = 'janela1'
         self.manager.get_screen('janela1').atualizar_dados(data)
         self.manager.transition.direction="left"
-        '''    
+           '''
         login=str(self.ids.login.text).lower().strip()
         senha=str(self.ids.senha.text).lower().strip()
         conn = sqlite3.connect('app.db')
         cursor = conn.cursor()
-        cursor.execute(f'SELECT * FROM usuario where name='{login}' and senha='{senha}' ')
+        cursor.execute(f"SELECT * FROM usuario where name='{login}' and senha='{senha}' ")
         resultado = cursor.fetchall()
         if resultado:
             data = {'nome': 'willow', 'idade': 28}
@@ -41,11 +41,11 @@ class Janelaprincipal(Screen):
         else:
             self.open_popup("usuario incorreto \n ou \n senha")
         self.ids.login.text='' 
-        self.ids.senha.text='' '''
+        self.ids.senha.text='' 
     
     def open_popup(self,text):
         popup = Popup(title=f'{text}'.upper(),
-                      size_hint=(None, None), size=(300, 400))
+                      size_hint=(1, None), size=(300, 400))
         popup.open()       
 class Janela1(Screen):
     def __init__(self, **kwargs):
@@ -67,23 +67,52 @@ class Janela1(Screen):
     def adicionarProduto(self):
         codigo=str(self.ids.codigoproduto.text).strip().upper()
         descricao=str(self.ids.descricaoproduto.text).strip().upper()
+        quant=self.ids.quant.text
+        vlcusto=self.ids.vlcusto.text
+        vlvendas=self.ids.vlvendas.text
         conn = sqlite3.connect('app.db')
         cursor = conn.cursor()
-        if codigo=='' or descricao=='':
-            self.open_popup("campo branco")
-        else:
-            conn = sqlite3.connect('app.db')
-            cursor = conn.cursor()
-            cursor.execute(f'''SELECT * FROM estoque where codigo='{codigo}' ''')
-            resultado = cursor.fetchall()
-            if resultado:
-                self.open_popup("produto ja exite")#chama funçao
+        while True:
+            if codigo=='':
+               self.open_popup("Campo codigo em branco")
+               self.ids.codigoproduto.focus = True
+               break
+            if descricao=='':
+               self.open_popup("Campo descricao em branco")
+               self.ids.descricaoproduto.focus = True
+               break
+            if quant=='':
+               self.open_popup("Campo quantida em branco")
+               self.ids.quant.focus = True
+               break
+            if vlcusto=='':
+               self.open_popup("Campo valor custo em branco")
+               self.ids.vlcusto.focus = True
+               break
+            if vlvendas=='':
+               self.open_popup("Campo valor venda em branco")
+               self.ids.vlvendas.focus = True
+               break
+            
             else:
-                cursor.execute(f'''INSERT INTO estoque (codigo,descricao) VALUES ('{codigo}','{descricao}')''')
-                conn.commit()
-                self.open_popup("Produto Cadastro com sucesso")
-            self.ids.codigoproduto.text =""
-            self.ids.descricaoproduto.text=""
+                conn = sqlite3.connect('app.db')
+                cursor = conn.cursor()
+                cursor.execute(f'''SELECT * FROM estoque where codigo='{codigo}' ''')
+                resultado = cursor.fetchall()
+                if resultado:
+                    self.open_popup("produto ja exite")#chama funçao
+                else:
+                    cursor.execute(f'''INSERT INTO estoque (codigo,descricao,quant,vl_custo,vl_venda) 
+                                VALUES ('{codigo}','{descricao}','{quant}','{vlcusto}','{vlvendas}')''')
+                    conn.commit()
+                    self.open_popup("Produto Cadastro com sucesso")
+                self.ids.codigoproduto.text =""
+                self.ids.descricaoproduto.text=""
+                self.ids.quant.text=""
+                self.ids.vlcusto.text=""
+                self.ids.vlvendas.text=""
+               
+            break
     def open_popup(self,text):#popus erro sistema
         popup = Popup(title=f'{text}'.upper(),
                       size_hint=(None, None), size=(300, 400))
@@ -96,28 +125,32 @@ class ListaPRoduto(Screen):
             
         def buscaProduto(self):
             busca=str(self.ids.buscarPRoduto.text).upper()
-            self.ids.list_view.clear_widgets()
             conn = sqlite3.connect('app.db')
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM estoque WHERE descricao LIKE ?", ('%' + busca + '%',))
             items = cursor.fetchall()
         
             if not items:
-                self.ids.list_view.clear_widgets()
+                pass
             else:
                 self.ids.list_view.clear_widgets()
                 for item in items:
-                    list_item = TwoLineListItem(text=item[1], secondary_text=item[2])
+                    #TwoLineListItem
+                    #list_item = OneLineListItem(text=item[1], secondary_text=item[2])
+                    list_item = OneLineListItem(text=item[2])
                     self.ids.list_view.add_widget(list_item)
                 conn.close()
         def voltatelaprincinpal(self):
             self.manager.current = 'janela1'
             self.manager.transition.direction="right"#colcoa direçao
+        def update_database(self):
+            self.ids.list_view.selection = [0].text         
+                        
 
 class vendas(MDApp):
     def build(self):
         DEBUG=1
-        #Window.size = (300, 600)
+        Window.size = (350, 600)
         conn = sqlite3.connect('app.db')
         cursor = conn.cursor()
 
@@ -129,7 +162,8 @@ class vendas(MDApp):
             cursor.execute('''INSERT INTO usuario (name,senha) VALUES (?,?)''', ('willow','123'))
         
         cursor.execute('''CREATE TABLE IF NOT EXISTS 
-                    estoque (id INTEGER PRIMARY KEY, codigo varchar(200),descricao varchar(200))''')
+                    estoque (id INTEGER PRIMARY KEY, codigo varchar(200),
+                    descricao varchar(200),quant int, vl_custo NUMERIC,vl_venda NUMERIC)''')
         
 
         conn.commit()
