@@ -1,42 +1,32 @@
 from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.app import MDApp
-from kivymd.uix.list import MDList, OneLineListItem
 
 KV = '''
-<MainScreen>:
-    BoxLayout:
-        orientation: 'vertical'
+BoxLayout:
+    orientation: 'vertical'
 
-        MDToolbar:
-            title: 'My App'
+    MDTextField:
+        id: text_field1
+        hint_text: "Digite seu nome"
+        on_text_validate: app.set_focus(text_field2)
 
-        ScrollView:
-            MDList:
-                id: my_list
+    MDTextField:
+        id: text_field2
+        hint_text: "Digite seu sobrenome"
+        on_text_validate: app.set_focus(text_field3)
 
-                OneLineListItem:
-                    text: 'Item 1'
-                    on_press: app.print_row(root, self)
-
-                OneLineListItem:
-                    text: 'Item 2'
-                    on_press: app.print_row(root, self)
-
+    MDTextField:
+        id: text_field3
+        hint_text: "Digite sua idade"
 '''
 
-class MainScreen(Screen):
-    pass
+class MyApp(MDApp):
 
-class TestApp(MDApp):
     def build(self):
-        sm = ScreenManager()
-        sm.add_widget(MainScreen(name='main'))
-        return sm
+        self.root = Builder.load_string(KV)
+        return self.root
 
-    def print_row(self, screen, list_item):
-        row_text = list_item.text
-        print(f"Selected row: {row_text}")
+    def set_focus(self, next_field):
+        next_field.focus = True
 
-if __name__ == '__main__':
-    TestApp().run()
+MyApp().run()

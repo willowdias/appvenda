@@ -46,6 +46,7 @@ JanelnaGerenciado:
                 line_color_focus: 1, 0, 0, 1
                 line_color_normal: 0, 0, 1, 1
                 text_color: 1, 1, 1, 1  # white text color
+                on_text_validate: root.set_focus(senha)
             MDTextField:
                 id: senha
                 icon_left:"eye-off"
@@ -54,9 +55,10 @@ JanelnaGerenciado:
                 helper_text_mode: "on_focus"
                 multiline: False
                 size_hint: (1, .4)
-            
+                on_text_validate: root.set_focus(connectar)
             MDRectangleFlatButton:
                 text: "CONECTAR"
+                id:connectar
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0, 0, 2, 1
                 size_hint: 0.4, 0.2
@@ -127,6 +129,7 @@ JanelnaGerenciado:
                     helper_text_mode: "on_focus"
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
                     on_text_validate:root.valquant()
+                    
                 MDTextField:
                     mode: "rectangle"
                     id: vlcusto

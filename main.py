@@ -42,7 +42,8 @@ class Janelaprincipal(Screen):
             self.open_popup("usuario incorreto \n ou \n senha")
         self.ids.login.text='' 
         self.ids.senha.text='' 
-    
+    def set_focus(self, next_field):
+        next_field.focus = True    
     def open_popup(self,text):
         popup = Popup(title=f'{text}'.upper(),
                       size_hint=(1, None), size=(300, 400))
