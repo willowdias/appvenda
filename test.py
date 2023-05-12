@@ -1,32 +1,38 @@
 from kivy.lang import Builder
+
 from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.list import IRightBodyTouch
 
 KV = '''
-BoxLayout:
-    orientation: 'vertical'
+OneLineAvatarIconListItem:
+    text: "One-line item with avatar"
+    on_size:
+        self.ids._right_container.width = container.width
+        self.ids._right_container.x = container.width
 
-    MDTextField:
-        id: text_field1
-        hint_text: "Digite seu nome"
-        on_text_validate: app.set_focus(text_field2)
+    IconLeftWidget:
+        icon: "cog"
 
-    MDTextField:
-        id: text_field2
-        hint_text: "Digite seu sobrenome"
-        on_text_validate: app.set_focus(text_field3)
+    YourContainer:
+        id: container
 
-    MDTextField:
-        id: text_field3
-        hint_text: "Digite sua idade"
+        MDIconButton:
+            icon: "minus"
+
+        MDIconButton:
+            icon: "plus"
 '''
 
-class MyApp(MDApp):
 
+class YourContainer(IRightBodyTouch, MDBoxLayout):
+    adaptive_width = True
+
+
+class Example(MDApp):
     def build(self):
-        self.root = Builder.load_string(KV)
-        return self.root
+        self.theme_cls.theme_style = "Dark"
+        return Builder.load_string(KV)
 
-    def set_focus(self, next_field):
-        next_field.focus = True
 
-MyApp().run()
+Example().run()

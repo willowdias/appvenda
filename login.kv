@@ -1,6 +1,5 @@
 JanelnaGerenciado:
     Janelaprincipal:
-    Janela1:
     ListaPRoduto:
 <Janelaprincipal>:
     name:"janelaprincipal"
@@ -55,7 +54,7 @@ JanelnaGerenciado:
                 helper_text_mode: "on_focus"
                 multiline: False
                 size_hint: (1, .4)
-                on_text_validate: root.set_focus(connectar)
+                on_text_validate: root.set_focus(login)
             MDRectangleFlatButton:
                 text: "CONECTAR"
                 id:connectar
@@ -68,142 +67,150 @@ JanelnaGerenciado:
                 on_press: 
                     #app.root.current = 'janela1'
                     root.logar()
-<Janela1>:#tela logado
-    name:"janela1"
-    MDFloatLayout:
-        orientation: 'vertical'
-		size: root.width, root.height
-        spacing:10
-        padding:10
-        md_bg_color: (0.9, 0.9, 0.9, 1.0)
-        BoxLayout:
-            orientation: "vertical"
-		    size: root.width, root.height
-            spacing:13
-            padding:10
-            
-            MDLabel:
-                id: label
-                text: "willow"
-                halign: "center"
-                font_size: 15
-                size_hint: (1, None)
-                elevation: 5
-                text_color: (0, 0, 0, 1)
-                #pos_hint: {"center_x":0.45,"center_y":0.80}
-            MDTopAppBar:
-                title:"CADASTRO PRODUTO"
-                left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
-                pos_hint: {"center_y":0.95}
-                elevation: 5
-                md_bg_color: 0, 0, 2, 1
-            MDTextField:
-              
-                mode: "rectangle" # Estilo do widget, neste caso, retangular
-                
-                id: codigoproduto
-                hint_text: "CODIGO*"
-                input_filter: "float"
-                helper_text_mode: "on_focus"
-                multiline: False
-                size_hint: (1, .0)
-                
-            MDTextField:
-                mode: "rectangle"    
-                id: descricaoproduto
-                #pos_hint: {"center_x":0.45,"center_y":0.65}
-                hint_text: "DESCRIÇAO*"
-                helper_text_mode: "on_focus"
-                multiline: False
-                size_hint: (1, .0)
-            BoxLayout:#box de venda
-                size_hint: (1, .1)
-                orientation: "horizontal"
-                spacing:10
-            
-                MDTextField:
-                    mode: "rectangle"
-                    id: quant
-                    hint_text: "QUANT*"
-                    input_filter: "float"
-                    helper_text_mode: "on_focus"
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                    on_text_validate:root.valquant()
-                    
-                MDTextField:
-                    mode: "rectangle"
-                    id: vlcusto
-                    hint_text: "VL CUSTO*"
-                    input_filter: "float"
-                    helper_text_mode: "on_focus"
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                    on_text_validate:root.valcusto()
-                MDTextField:
-                    mode: "rectangle"
-                    id: vlvendas
-                    hint_text: "VL VENDA"
-                    input_filter: "float"
-                    helper_text_mode: "on_focus"
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                    on_text_validate:root.valvenda()
-            BoxLayout:
-                size_hint: (1, .3)
-                orientation: "horizontal"
-                size: root.width, root.height
-                spacing:10
-                padding:10
-               
-                MDRectangleFlatButton:
-                    text: "Adicionar Produto"
-                    halign: "center"
-                    text_color: 1, 1, 1, 1
-                    md_bg_color: 0, 0, 2, 1
-                    width: "200dp"
-                    height: "50dp"
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                    on_release:
-                        root.adicionarProduto()  
-                MDRectangleFlatButton:
-                    text: "Ver Produtos"
-                    halign: "center"
-                    text_color: 1, 1, 1, 1
-                    md_bg_color: 0, 0, 2, 1
-                    width: "220dp"
-                    height: "50dp"
-                    pos_hint: {"center_x": 0.45, "center_y": 0.5}
-                    on_release:
-                        root.verprodutos()     
+
                     
 <ListaPRoduto>:
     name:"Produto"
-    MDBoxLayout:
-        orientation: 'vertical'
-		size: root.width, root.height
-        spacing:10
-        padding:10
-        MDTopAppBar:
-            title:"produto"
-            #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
-            left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
-            pos_hint: {"center_y":0.95}
-            elevation:1
-            text_color: 1, 1, 1, 1
-            md_bg_color: 0, 0, 2, 1
-        MDTextField:
-            id: buscarPRoduto
+    
+    MDBottomNavigation:
        
-            hint_text: "Busca produto"
-            helper_text_mode: "on_focus"
-            multiline: False
-         
-            size_hint: (1, .2)
-            
-            on_text_validate:
-                root.buscaProduto()
-            
-        ScrollView:
-            MDList:
-                id: list_view
-                height: self.minimum_height
-                multiple: True  
-                allow_empty_selection: True
+        MDBottomNavigationItem:
+            name:"cadastro"
+            text:"Cadastro"
+            icon: 'send-lock'
+            MDFloatLayout:
+                orientation: 'vertical'
+                size: root.width, root.height
+                spacing:10
+                padding:10
+                md_bg_color: (0.9, 0.9, 0.9, 1.0)
+                BoxLayout:
+                    orientation: "vertical"
+                    size: root.width, root.height
+                    spacing:13
+                    padding:10
+                    
+                    MDLabel:
+                        id: label
+                        text: "willow"
+                        halign: "center"
+                        font_size: 15
+                        size_hint: (1, None)
+                        elevation: 5
+                        text_color: (0, 0, 0, 1)
+                        #pos_hint: {"center_x":0.45,"center_y":0.80}
+                    MDTopAppBar:
+                        title:"CADASTRO PRODUTO"
+                        left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                        pos_hint: {"center_y":0.95}
+                        elevation: 5
+                        md_bg_color: 0, 0, 2, 1
+                    MDTextField:
+                    
+                        mode: "rectangle" # Estilo do widget, neste caso, retangular
+                        
+                        id: codigoproduto
+                        hint_text: "CODIGO*"
+                        input_filter: "float"
+                        helper_text_mode: "on_focus"
+                        multiline: False
+                        size_hint: (1, .0)
+                        
+                    MDTextField:
+                        mode: "rectangle"    
+                        id: descricaoproduto
+                        #pos_hint: {"center_x":0.45,"center_y":0.65}
+                        hint_text: "DESCRIÇAO*"
+                        helper_text_mode: "on_focus"
+                        multiline: False
+                        size_hint: (1, .0)
+                    BoxLayout:#box de venda
+                        size_hint: (1, .1)
+                        orientation: "horizontal"
+                        spacing:10
+                    
+                        MDTextField:
+                            mode: "rectangle"
+                            id: quant
+                            hint_text: "QUANT*"
+                            input_filter: "float"
+                            helper_text_mode: "on_focus"
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            on_text_validate:root.valquant()
+                            
+                        MDTextField:
+                            mode: "rectangle"
+                            id: vlcusto
+                            hint_text: "VL CUSTO*"
+                            input_filter: "float"
+                            helper_text_mode: "on_focus"
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            on_text_validate:root.valcusto()
+                        MDTextField:
+                            mode: "rectangle"
+                            id: vlvendas
+                            hint_text: "VL VENDA"
+                            input_filter: "float"
+                            helper_text_mode: "on_focus"
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            on_text_validate:root.valvenda()
+                    BoxLayout:
+                        size_hint: (1, .3)
+                        orientation: "horizontal"
+                        size: root.width, root.height
+                        spacing:10
+                        padding:10
+                    
+                        MDRectangleFlatButton:
+                            text: "Adicionar Produto"
+                            halign: "center"
+                            text_color: 1, 1, 1, 1
+                            md_bg_color: 0, 0, 2, 1
+                            width: "200dp"
+                            height: "50dp"
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            on_release:
+                                root.adicionarProduto()  
+                        
+        MDBottomNavigationItem:
+            name:"estoque"
+            text:"Estoque"
+            icon: 'package-variant'
+            size: root.width, root.height
+            spacing:10
+            padding:10
+           
+            MDTopAppBar:
+                title:"PRODUTO"
+                #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
+                #left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_x": .5, "center_y": .95}
+                elevation:3
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 2, 1
+                
+            MDCard:
+                orientation: "vertical"
+                padding: "8dp"
+                size_hint: None, None
+                size: "280dp", "400dp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                #ripple_behavior: True
+                #focus_behavior: True
+                
+                md_bg_color: self.theme_cls.bg_light
+                MDTextField:
+                    id: buscarPRoduto
+                    hint_text: "Busca produto"
+                    helper_text_mode: "on_focus"
+                    multiline: False  
+                    on_text_validate:
+                        root.buscaProduto() 
+                ScrollView:
+                    MDList:
+                        id: list_view
+                        height: self.minimum_height
+                        multiple: True 
+                        md_bg_color: 0.6, 0.6, 0.6, 1
+                        text_color: 1, 1, 1, 1
+                        allow_empty_selection: True
