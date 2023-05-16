@@ -1,0 +1,287 @@
+JanelnaGerenciado:
+    Config:
+    Login:
+    ListaPRoduto:
+<Config>
+    name:"config"
+    MDFloatLayout:
+        size: 600, 900
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        BoxLayout:
+            orientation: "vertical"
+            size: root.width, root.height
+            spacing:10
+            padding:10
+            Image:
+                source: "venda.png"
+                allow_stretch:True
+            ProgressBar:
+                id: progress_bar
+                size_hint:1,1
+                value: 0
+                max: 100
+                height: dp(10)
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                spacing:10
+                padding:10
+                MDTextField:
+                    id: ip
+                    icon_left:"ip-network-outline"
+                    hint_text: "IP-END"
+                    max_text_length: 13
+                    multiline: False
+                    line_color_focus: 1, 0, 0, 1
+                    line_color_normal: 0, 0, 1, 1
+                    text_color: 1, 1, 1, 1  # white text color
+                MDRectangleFlatButton:
+                    text: "Verificar"
+                    id:connectar
+                    text_color: 1, 1, 1, 1
+                    md_bg_color: 0, 0, 2, 1
+                    width: "220dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    font_size: "18sp"
+                    on_press: 
+                        root.verificaip()
+
+    
+<Login>:
+    name:"login"
+    MDFloatLayout:
+        BoxLayout:
+            orientation: "vertical"
+		    size: root.width, root.height
+            spacing:10
+            padding:10
+            
+            MDTopAppBar:
+                title:"Inicial"
+                left_action_items:[["menu",lambda x:root.menu('Menu')]]
+                #left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_x": .5, "center_y": .95}
+                elevation:2
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 1, 1
+                MDLabel:
+                    text:"versao : 1.0.5"
+                    text_color: 1, 1, 1, 1
+                    theme_text_color: "Custom"
+                    halign: "right" 
+            Image:
+                source: "venda.png"
+                allow_stretch:True
+            MDLabel:
+                 
+                id:labelogin
+                #md_bg_color:1, 0, 3, 1
+                text: "Seja Bem Vindo "
+                halign: "center"
+                size_hint:1,None
+                font_size: 25
+            ProgressBar:
+                id: progress_bar
+                size_hint:1,None
+                value: 0
+                max: 100
+                height: dp(10) 
+            MDTextField:
+                
+                id: login
+                icon_left:"account"
+                hint_text: "Login"
+                multiline: False
+                size_hint: (1, .4)
+                line_color_focus: 1, 0, 0, 1
+                line_color_normal: 0, 0, 1, 1
+                text_color: 1, 1, 1, 1  # white text color
+                on_text_validate: root.set_focus(senha)
+            MDTextField:
+                id: senha
+                icon_left:"eye-off"
+                password: True
+                hint_text: "senha"
+                helper_text_mode: "on_focus"
+                multiline: False
+                size_hint: (1, .4)
+                on_text_validate: root.set_focus(login)
+            MDRectangleFlatButton:
+                text: "CONECTAR"
+                id:connectar
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 2, 1
+                size_hint: 0.4, 0.2
+                width: "220dp"
+                font_size: "18sp"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.80}
+                on_press: 
+                    #app.root.current = 'janela1'
+                    root.logar()
+
+                    
+<ListaPRoduto>:
+    name:"Produto"
+    
+    MDBottomNavigation:
+        panel_color: 0, 0, 1, 1
+        text_color_active: "lightgrey"
+        id: btm_tab
+        background_color_active: 1, 0, 0, 1 
+        MDBottomNavigationItem:
+            selected_color: 1, 0, 0, 1  # Cor de fundo vermelho
+            name:"cadastro"
+            text:"Novo Produto"
+            icon: 'plus'
+            orientation: "vertical"
+            MDTopAppBar:
+                title:"Cadastro Produto"
+                left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                #left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_x": .5, "center_y": .95}
+                elevation:2
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 1, 1
+            
+                     
+            MDCard:
+                orientation: "vertical"
+                padding: "8dp"
+                size_hint: None, None
+                size: "400dp", "450dp"
+                pos_hint: {"center_x": .5, "center_y": .48}
+                #ripple_behavior: True
+                #focus_behavior: True
+                md_bg_color: self.theme_cls.bg_light 
+                spacing:15
+                MDLabel:
+                    id: label
+                    text: "willow"
+                    halign: "center"
+                    font_size: '24sp'
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    size_hint: (1, .1)
+                    pos_hint: {"center_x": .5, "center_y": .48}
+                    md_bg_color: 0, 0, 1, 1
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint: (1, .3)
+                    pos_hint: {"center_x": .5, "center_y": .48}
+                    MDTextField:
+                        mode: "rectangle" # Estilo do widget, neste caso, retangular
+                        id: codigoproduto
+                        hint_text: "CODIGO*"
+                        input_filter: "float"
+                        helper_text_mode: "on_focus"
+                        multiline: False
+                        size_hint: (1, .0)
+                            
+                    MDTextField:
+                        mode: "rectangle"    
+                        id: descricaoproduto
+                        #pos_hint: {"center_x":0.45,"center_y":0.65}
+                        hint_text: "DESCRIÇAO*"
+                        helper_text_mode: "on_focus"
+                        multiline: False
+                        size_hint: (1, .0)
+                BoxLayout:#box de venda
+                    size_hint: (1, .1)
+                    orientation: "horizontal"
+                    spacing:13
+                  
+                    MDTextField:
+                        mode: "rectangle"
+                        id: quant
+                        hint_text: "QUANT*"
+                        input_filter: "float"
+                        helper_text_mode: "on_focus"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_text_validate:root.valquant()
+                                
+                    MDTextField:
+                        mode: "rectangle"
+                        id: vlcusto
+                        hint_text: "VL CUSTO*"
+                        input_filter: "float"
+                        helper_text_mode: "on_focus"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_text_validate:root.valcusto()
+                    MDTextField:
+                        mode: "rectangle"
+                        id: vlvendas
+                        hint_text: "VL VENDA"
+                        input_filter: "float"
+                        helper_text_mode: "on_focus"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_text_validate:root.valvenda()
+                BoxLayout:
+                    size_hint: (1, .3)
+                    orientation: "horizontal"
+                    MDRectangleFlatButton:
+                        text: "Adicionar Produto"
+                        halign: "center"
+                        text_color: 1, 1, 1, 1
+                        md_bg_color: 0, 0, 2, 1
+                        width: "200dp"
+                        height: "50dp"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_release:root.adicionarProduto()  
+                            
+        MDBottomNavigationItem:
+            name:"estoque"
+            text:"Estoque"
+            icon: 'store-search'
+            size: root.width, root.height
+            spacing:10
+            padding:10
+            #on_tab_release: root.click()
+            MDTopAppBar:
+                title:"PRODUTO"
+                #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
+                #left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_x": .5, "center_y": .95}
+                elevation:2
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 1, 1
+                
+            MDCard:
+                orientation: "vertical"
+                padding: "8dp"
+                size_hint: None, None
+                size: "400dp", "400dp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                #ripple_behavior: True
+                #focus_behavior: True
+                
+                md_bg_color: self.theme_cls.bg_light
+                MDTextField:
+                    id: buscarPRoduto
+                    hint_text: "Busca produto"
+                    helper_text_mode: "on_focus"
+                    multiline: False  
+                    on_text_validate:
+                        root.buscaProduto() 
+                ScrollView:
+                    MDList:
+                    
+                        id: list_view
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 0, 1  # Amarelo
+                        allow_empty_selection: True
+        MDBottomNavigationItem:
+            name:"sicronizado"
+            text:"sicronizado"
+            icon: 'cloud-upload'
+            size: root.width, root.height
+            spacing:10
+            padding:10
+            MDTopAppBar:
+                title:"CARREGAR"
+                #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
+                #left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_x": .5, "center_y": .95}
+                elevation:2
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 1, 1

@@ -1,0 +1,42 @@
+BoxLayout:
+    orientation: 'vertical'
+
+    MDBottomNavigation:
+        MDBottomNavigationItem:
+            name: 'screen1'
+            text: 'Item 1'
+            icon: 'home'
+            on_tab_release: app.switch_screen('screen1')
+
+            MDIconButton:
+                icon: 'home'
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release: app.switch_screen('screen1')
+
+        MDBottomNavigationItem:
+            name: 'screen2'
+            text: 'Item 2'
+            icon: 'star'
+            on_tab_release: app.switch_screen('screen2')
+
+            MDIconButton:
+                icon: 'star'
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release: app.switch_screen('screen2')
+
+        MDBottomNavigationItem:
+            name: 'screen3'
+            text: 'Item 3'
+            icon: 'account'
+            on_tab_release: app.switch_screen('screen3')
+
+            MDIconButton:
+                icon: 'account'
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_release: app.switch_screen('screen3')
