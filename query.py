@@ -40,5 +40,15 @@ class sqlite_db:
         cur.execute('''CREATE TABLE IF NOT EXISTS 
             estoque (id INTEGER PRIMARY KEY, codigo varchar(200),
             descricao varchar(200),quant int, vl_custo NUMERIC,vl_venda NUMERIC)''')
+    def exporta(self):
+        nome_tabela = 'usuario'
+        registros=db.select(f"SELECT * FROM {nome_tabela}")
+        nome_arquivo = 'exportacao.txt'
+        with open(nome_arquivo, 'w') as arquivo:
+            # Gerar comandos INSERT para cada registro
+            for registro in registros:
+                comando_insert = f"INSERT INTO app.{nome_tabela}(id,name,senha)VALUES {registro};"
+                arquivo.write(f"{comando_insert}\n")
+      
 
 db=sqlite_db("app.db")

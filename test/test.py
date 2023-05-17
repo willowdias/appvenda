@@ -1,61 +1,129 @@
 from kivy.lang import Builder
-
 from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
-from kivymd.uix.responsivelayout import MDResponsiveLayout
-from kivymd.uix.screen import MDScreen
-
-KV = '''
-<CommonComponentLabel>
-    halign: "center"
+#import sqlite3
+import mysql.connector
 
 
-<MobileView>
-    CommonComponentLabel:
-        text: "Mobile"
+
+class MainApp(MDApp):
+	def build(self):
+		self.theme_cls.theme_style = "Dark"
+		self.theme_cls.primary_palette = "BlueGray"
+
+		# Create Database Or Connect To One
+		#conn = sqlite3.connect('first_db.db')
+		
+		# Define DB Stuff
+		mydb = mysql.connector.connect(
+			host = "localhost", 
+			user = "root",
+			passwd = "",
+			database = "app",
+			)
+
+		# Create A Cursor
+		c = mydb.cursor()
+
+		# Create an actual database
+		c.execute("CREATE DATABASE IF NOT EXISTS second_db")
+
+		# Check to see if database was created
+		#c.execute("SHOW DATABASES")
+		#for db in c:
+		#	print(db)
 
 
-<TabletView>
-    CommonComponentLabel:
-        text: "Table"
+
+		# Create A Table
+		c.execute("""CREATE TABLE if not exists customers(
+			name VARCHAR(50))
+		 """)
+
+		# Check to see if table created
+		#c.execute("SELECT * FROM customers")
+		#print(c.description)
 
 
-<DesktopView>
-    CommonComponentLabel:
-        text: "Desktop"
+
+		# Commit our changes
+		mydb.commit()
+
+		# Close our connection
+		mydb.close()
+
+		return Builder.load_file('my.kv')
 
 
-ResponsiveView:
-'''
+
+	def submit(self):
+		# Create Database Or Connect To One
+		#conn = sqlite3.connect('first_db.db')
+		mydb = mysql.connector.connect(
+			host = "192.168.0.108", 
+			user = "root",
+			passwd = "",
+			database = "app",
+			)
+
+		# Create A Cursor
+		c = mydb.cursor()
+
+		
+
+		# Add A Record
+		sql_command = "INSERT INTO customers (name) VALUES (%s)"
+		values = (self.root.ids.word_input.text,)
+		
+		# Execute SQL Command
+		c.execute(sql_command, values)	
+		
+
+		# Add a little message
+		self.root.ids.word_label.text = f'{self.root.ids.word_input.text} Added'
+
+		# Clear the input box
+		
+		self.root.ids.word_input.text = ''
 
 
-class CommonComponentLabel(MDLabel):
-    pass
+		# Commit our changes
+		mydb.commit()
+
+		# Close our connection
+		mydb.close()
+
+		
+
+	def show_records(self):
+		# Create Database Or Connect To One
+		#conn = sqlite3.connect('first_db.db')
+		mydb = mysql.connector.connect(
+			host = "192.168.0.108", 
+			user = "root",
+			passwd = "",
+			database = "app",
+			)
+
+		# Create A Cursor
+		c = mydb.cursor()
+
+		
+		# Grab records from database
+		c.execute("SELECT * FROM customers")
+		records = c.fetchall()
+
+		word = ''
+		# Loop thru records
+		for record in records:
+			word = f'{word}\n{record[0]}'
+			self.root.ids.word_label.text = f'{word}'
+
+		# Commit our changes
+		mydb.commit()
+
+		# Close our connection
+		mydb.close()
 
 
-class MobileView(MDScreen):
-    pass
 
-
-class TabletView(MDScreen):
-    pass
-
-
-class DesktopView(MDScreen):
-    pass
-
-
-class ResponsiveView(MDResponsiveLayout, MDScreen):
-    def __init__(self, **kw):
-        super().__init__(**kw)
-        self.mobile_view = MobileView()
-        self.tablet_view = TabletView()
-        self.desktop_view = DesktopView()
-
-
-class Test(MDApp):
-    def build(self):
-        return Builder.load_string(KV)
-
-
-Test().run()
+MainApp().run()

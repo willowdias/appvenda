@@ -1,42 +1,29 @@
-BoxLayout:
-    orientation: 'vertical'
+MDFloatLayout:
+	BoxLayout:
+		orientation: "vertical"
+		size: root.width, root.height
+	
+		Label:
+			id: word_label
+			text_size: self.size
+			halign: "center"
+			valign: "middle"
+			text: "Enter A Name"
+			font_size: 32
 
-    MDBottomNavigation:
-        MDBottomNavigationItem:
-            name: 'screen1'
-            text: 'Item 1'
-            icon: 'home'
-            on_tab_release: app.switch_screen('screen1')
+		TextInput:
+			id: word_input
+			multiline: False
+			size_hint: (1, .5)
 
-            MDIconButton:
-                icon: 'home'
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                on_release: app.switch_screen('screen1')
+		Button:
+			size_hint: (1, .5)
+			font_size: 32
+			text: "Submit Name"
+			on_press: app.submit()
 
-        MDBottomNavigationItem:
-            name: 'screen2'
-            text: 'Item 2'
-            icon: 'star'
-            on_tab_release: app.switch_screen('screen2')
-
-            MDIconButton:
-                icon: 'star'
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                on_release: app.switch_screen('screen2')
-
-        MDBottomNavigationItem:
-            name: 'screen3'
-            text: 'Item 3'
-            icon: 'account'
-            on_tab_release: app.switch_screen('screen3')
-
-            MDIconButton:
-                icon: 'account'
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                on_release: app.switch_screen('screen3')
+		Button:
+			size_hint: (1, .5)
+			font_size: 32
+			text: "Show Records"
+			on_press: app.show_records()

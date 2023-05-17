@@ -1,4 +1,5 @@
 from kivymd.app import MDApp
+
 from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen,ScreenManager
@@ -8,14 +9,16 @@ from kivymd.uix.list import TwoLineListItem, MDList
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty
-import subprocess
 #import query
 from kivymd.uix.dialog import MDDialog
 from query import*
 from messagem import*
 import socket
-import re
- 
+import mysql.connector
+import configparser
+from kivy.config import ConfigParser
+import os,sys
+from bd import*
 class JanelnaGerenciado(ScreenManager):
     pass
 class Config(Screen):
@@ -154,17 +157,25 @@ class ListaPRoduto(Screen):
                     self.ids.vlvendas.text=""
                 
                 break
-      
+        def test(self):
+         
+            banco=bancomysql('192.168.0.108')  
+            lista=["INSERT INTO usuario(id,name,senha)VALUES (1, 'willow', 123)","INSERT INTO app.usuario(id,name,senha)VALUES (2, 'elias', '123');"]
+            for i in lista:
+                banco.insert(i)
         def open_popup(self,text):#popus erro sistema
             popup = MyPopup()
             popup.atualizar_dados(data=text)
-       
+            
+ 
 class vendas(MDApp):
     def build(self):
         DEBUG=1
-        Window.size = (400, 600)
+        Window.size = (400, 600) 
+        
+        
         db.criaTabela()
-            
+        
         return Builder.load_file('main.kv')
     
 if __name__ == '__main__':
