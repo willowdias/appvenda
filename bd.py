@@ -2,16 +2,22 @@ import mysql.connector
 from mysql.connector import errorcode
 class bancomysql:
     def __init__(self,ip=None):
-        self.mydb = mysql.connector.connect(
-        host=f"{ip}",
-        user="root",
-        password="",
-        database="app",
-        port='3306'
-        )
-        self.conn=self.mydb.cursor()
-        
-        self.creattabela()
+       self.host = ip
+    def verifica(self):
+        try:
+            self.mydb = mysql.connector.connect(
+                host=f"{self.host}",
+                user="root",
+                password="",
+                database="app",
+                port='3306'
+                )
+            
+            self.mydb.close()
+            return True  
+        except mysql.connector.Error as err:
+            print(f"Erro ao conectar ao banco de dados: {err}")
+            return False 
     def select(self,query):
         mycursor = self.mydb.cursor()
         mycursor.execute(f"{query} " )
@@ -36,7 +42,7 @@ class bancomysql:
         '''
         mycursor.execute(usuario)
         return self.mydb.commit()
-     
+ 
 '''
 banco=bancomysql()
 lista=["INSERT INTO usuario(id,name,senha)VALUES (1, 'willow', 123)","INSERT INTO app.usuario(id,name,senha)VALUES (2, 'elias', '123');"]

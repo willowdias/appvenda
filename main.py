@@ -25,16 +25,24 @@ class Config(Screen):
     pass
 
     def verificaip(self):
-        hostname = socket.gethostname()
-        ip_address = socket.gethostbyname(hostname)
-        self.ids.ip.text=ip_address
-        for i in range(101):
-            self.ids.progress_bar.value = i
-        self.manager.current = 'login'
-        self.manager.transition.direction="left"
-    def menu(self):
+      
+        ip=self.ids.ip.text
+        banco=bancomysql(ip)
+        if ip=="":
+            self.menu("ip Invalido")
+   
+            
+        elif banco.verifica()==False:
+            self.menu(f"{ip} ip Invalido")
+        else:
+            self.menu(f"{ip} ip valido")
+            for i in range(101):
+                self.ids.progress_bar.value = i
+            self.manager.current = 'login'
+            self.manager.transition.direction="left"
+    def menu(self,mesagem):
         popup = MyPopup()
-        popup.atualizar_dados(data="Olá, mundo!")
+        popup.atualizar_dados(data=mesagem)
 class Login(Screen):#logar sistema3
         
     def on_pre_enter(self):
@@ -157,12 +165,10 @@ class ListaPRoduto(Screen):
                     self.ids.vlvendas.text=""
                 
                 break
-        def test(self):
-         
-            banco=bancomysql('192.168.0.108')  
-            lista=["INSERT INTO usuario(id,name,senha)VALUES (1, 'willow', 123)","INSERT INTO app.usuario(id,name,senha)VALUES (2, 'elias', '123');"]
-            for i in lista:
-                banco.insert(i)
+        def carregardados(self):
+            db.exporta()
+            
+           
         def open_popup(self,text):#popus erro sistema
             popup = MyPopup()
             popup.atualizar_dados(data=text)
@@ -172,7 +178,6 @@ class vendas(MDApp):
     def build(self):
         DEBUG=1
         Window.size = (400, 600) 
-        
         
         db.criaTabela()
         
