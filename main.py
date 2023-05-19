@@ -30,8 +30,6 @@ class Config(Screen):
         banco=bancomysql(ip)
         if ip=="":
             self.menu("ip Invalido")
-   
-            
         elif banco.verifica()==False:
             self.menu(f"{ip} ip Invalido")
         else:
@@ -56,7 +54,7 @@ class Login(Screen):#logar sistema3
         cursor.execute(f"SELECT * FROM usuario where name='{login}' and senha='{senha}' ")
         resultado = cursor.fetchall()
         if resultado:
-            data = {'nome': 'willow', 'idade': 28}
+            data = {'nome': f'{login}', 'idade': 28}
             self.manager.current = 'Produto'
             self.manager.get_screen('Produto').atualizar_dados(data)
             self.manager.transition.direction="left"
@@ -99,7 +97,6 @@ class ListaPRoduto(Screen):
                 self.ids.btm_tab.switch_tab('cadastro')
             popup = MyPopup(edita)
             popup.open()
-     
 
         def update_database(self):
             self.ids.list_view.selection = [0].text
