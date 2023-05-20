@@ -1,129 +1,51 @@
-from kivy.lang import Builder
 from kivymd.app import MDApp
-#import sqlite3
-import mysql.connector
+from kivymd.uix.boxlayout import BoxLayout
+from kivymd.uix.list import MDList, OneLineListItem
+from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDFlatButton, MDIconButton
 
 
+class TelaVenda(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
 
-class MainApp(MDApp):
-	def build(self):
-		self.theme_cls.theme_style = "Dark"
-		self.theme_cls.primary_palette = "BlueGray"
+        # Título da tela
+        title_label = MDLabel(text='Tela de Vendas', halign='center', theme_text_color='Secondary')
+        self.add_widget(title_label)
 
-		# Create Database Or Connect To One
-		#conn = sqlite3.connect('first_db.db')
-		
-		# Define DB Stuff
-		mydb = mysql.connector.connect(
-			host = "localhost", 
-			user = "root",
-			passwd = "",
-			database = "app",
-			)
+        # Conteúdo da tela
+        content_box = BoxLayout(orientation='vertical')
+        self.add_widget(content_box)
 
-		# Create A Cursor
-		c = mydb.cursor()
+        # Lista de vendas
+        self.vendas_list = MDList()
+        content_box.add_widget(self.vendas_list)
 
-		# Create an actual database
-		c.execute("CREATE DATABASE IF NOT EXISTS second_db")
+        # Botão de adicionar venda
+        add_button = MDFlatButton(text='Adicionar Venda', on_release=self.adicionar_venda)
+        content_box.add_widget(add_button)
 
-		# Check to see if database was created
-		#c.execute("SHOW DATABASES")
-		#for db in c:
-		#	print(db)
+    def adicionar_venda(self, instance):
+        # Função chamada quando o botão de adicionar venda é pressionado
+        venda_item = BoxLayout(orientation='horizontal', size_hint_y=None, height=48)
 
+        item_label = OneLineListItem(text='Nova Venda')
+        delete_button = MDIconButton(icon='trash-can-outline', on_release=self.remover_venda)
+        venda_item.add_widget(item_label)
+        venda_item.add_widget(delete_button)
+        self.vendas_list.add_widget(venda_item)
 
-
-		# Create A Table
-		c.execute("""CREATE TABLE if not exists customers(
-			name VARCHAR(50))
-		 """)
-
-		# Check to see if table created
-		#c.execute("SELECT * FROM customers")
-		#print(c.description)
+    def remover_venda(self, instance):
+        # Função chamada quando o botão de exclusão de venda é pressionado
+        venda_item = instance.parent
+        self.vendas_list.remove_widget(venda_item)
 
 
-
-		# Commit our changes
-		mydb.commit()
-
-		# Close our connection
-		mydb.close()
-
-		return Builder.load_file('my.kv')
+class MyApp(MDApp):
+    def build(self):
+        return TelaVenda()
 
 
-
-	def submit(self):
-		# Create Database Or Connect To One
-		#conn = sqlite3.connect('first_db.db')
-		mydb = mysql.connector.connect(
-			host = "192.168.0.108", 
-			user = "root",
-			passwd = "",
-			database = "app",
-			)
-
-		# Create A Cursor
-		c = mydb.cursor()
-
-		
-
-		# Add A Record
-		sql_command = "INSERT INTO customers (name) VALUES (%s)"
-		values = (self.root.ids.word_input.text,)
-		
-		# Execute SQL Command
-		c.execute(sql_command, values)	
-		
-
-		# Add a little message
-		self.root.ids.word_label.text = f'{self.root.ids.word_input.text} Added'
-
-		# Clear the input box
-		
-		self.root.ids.word_input.text = ''
-
-
-		# Commit our changes
-		mydb.commit()
-
-		# Close our connection
-		mydb.close()
-
-		
-
-	def show_records(self):
-		# Create Database Or Connect To One
-		#conn = sqlite3.connect('first_db.db')
-		mydb = mysql.connector.connect(
-			host = "192.168.0.108", 
-			user = "root",
-			passwd = "",
-			database = "app",
-			)
-
-		# Create A Cursor
-		c = mydb.cursor()
-
-		
-		# Grab records from database
-		c.execute("SELECT * FROM customers")
-		records = c.fetchall()
-
-		word = ''
-		# Loop thru records
-		for record in records:
-			word = f'{word}\n{record[0]}'
-			self.root.ids.word_label.text = f'{word}'
-
-		# Commit our changes
-		mydb.commit()
-
-		# Close our connection
-		mydb.close()
-
-
-
-MainApp().run()
+if __name__ == '__main__':
+    MyApp().run()

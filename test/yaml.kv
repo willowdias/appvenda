@@ -1,0 +1,16 @@
+<RemoverItem>:
+    orientation: 'vertical'
+
+    MDToolbar:
+        title: 'Itens Removíveis'
+        md_bg_color: app.theme_cls.primary_color
+        left_action_items: [['arrow-left', lambda x: app.stop()]]
+
+    ScrollView:
+        MDList:
+            id: mdlist
+
+<ItemRemovivel>:
+    IconLeftWidget:
+        icon: 'delete'
+        on_release: app.root.remover_item(root)

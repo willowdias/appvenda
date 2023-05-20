@@ -262,23 +262,114 @@ JanelnaGerenciado:
                     helper_text_mode: "on_focus"
                     multiline: False  
                     on_text_validate:
-                        root.buscaProduto() 
+                        root.buscaProduto()
+              
                 ScrollView:
+                    orientation:'vertical'
+                    size_hint_y: None
+                    height: 300
+                    y: 1
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    bar_width: "8dp"
                     MDList:
-                    
+    
                         id: list_view
                         theme_text_color: "Custom"
                         text_color: 1, 1, 0, 1  # Amarelo
                         allow_empty_selection: True
+                        
+                    
         MDBottomNavigationItem:
             name:"vendas"
             text:"vendas"
             icon: 'silverware'
             size: root.width, root.height
             spacing:10
-            padding:10
-          
-
+            padding:15
+            MDTopAppBar:
+                title:"Vendas"
+                #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
+                #left_action_items:[["arrow-left",lambda x:root.voltatelaprincinpal()]]
+                pos_hint: {"center_x": .5, "center_y": .95}
+                elevation:2
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 1, 1
+                
+            MDCard:
+                orientation: "vertical"
+                padding: "8dp"
+                size_hint: None, None
+                size: "400dp", "400dp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                #ripple_behavior: True
+                #focus_behavior: True
+                
+                md_bg_color: self.theme_cls.bg_light
+                MDTextField:
+                    id: addprodutos
+                    hint_text: "Busca produto"
+                    helper_text_mode: "on_focus"
+                    multiline: False  
+                    on_text_validate:
+                        root.adicionaprodutos()
+                
+                BoxLayout:
+                    orientation:'vertical'
+                    BoxLayout:
+                        id:list
+                        md_bg_color: 0, 0, 2, 1
+                        orientation:'vertical'
+                        size_hint_y:None 
+                        height:100
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        ScrollView:
+                            orientation:'vertical'
+                            size_hint_y: None
+                            height: 300
+                            y: 1
+                            do_scroll_x: False
+                            do_scroll_y: True
+                            bar_width: "8dp"
+                            MDList:
+                                id: venda_produto
+                                theme_text_color: "Custom"
+                                height: "300dp"
+                                spacing: dp(40)
+                                padding: dp(10)
+                                allow_empty_selection: True
+                                GridLayout:
+                                    cols: 1
+            BoxLayout:
+                orientation: "vertical"
+                padding: "8dp"
+                size_hint: None, None
+                
+                size: "400dp", "300dp"
+                pos_hint: {"center_x": .5, "center_y": .1}
+                md_bg_color: 0, 0, 1,
+                BoxLayout:
+                    orientation:'horizontal'
+                    MDLabel:
+                        id: quantidaITens
+                        text: "Quant 15"
+                        halign: "center"
+                        font_size: '15sp'
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+                        size_hint: (1, .1)
+                        pos_hint: {"center_x": .5, "center_y": .48}
+                        md_bg_color: 0, 0, 1, 1  
+                    MDLabel:
+                        id: VAlortotalvenda
+                        text: "1500,00"
+                        halign: "center"
+                        font_size: '15sp'
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+                        size_hint: (1, .1)
+                        pos_hint: {"center_x": .5, "center_y": .48}
+                        md_bg_color: 0, 0, 1, 1        
         MDBottomNavigationItem:
             name:"sicronizado"
             text:"sicronizado"

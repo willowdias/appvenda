@@ -8,16 +8,18 @@ from kivy.uix.scrollview import ScrollView
 from kivymd.uix.list import TwoLineListItem, MDList
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty
-#import query
-from kivymd.uix.dialog import MDDialog
-from query import*
-from messagem import*
+from kivy.properties import*
 import socket
 import mysql.connector
 import configparser
 from kivy.config import ConfigParser
 import os,sys
+from kivymd.uix.button import MDFlatButton, MDIconButton
+#import query
+from kivymd.uix.dialog import MDDialog
+from query import*
+from messagem import*
+
 from bd import*
 class JanelnaGerenciado(ScreenManager):
     pass
@@ -28,16 +30,16 @@ class Config(Screen):
       
         ip=self.ids.ip.text
         banco=bancomysql(ip)
-        if ip=="":
+        '''if ip=="":
             self.menu("ip Invalido")
         elif banco.verifica()==False:
             self.menu(f"{ip} ip Invalido")
         else:
             self.menu(f"{ip} ip valido")
             for i in range(101):
-                self.ids.progress_bar.value = i
-            self.manager.current = 'login'
-            self.manager.transition.direction="left"
+                self.ids.progress_bar.value = i'''
+        self.manager.current = 'login'
+        self.manager.transition.direction="left"
     def menu(self,mesagem):
         popup = MyPopup()
         popup.atualizar_dados(data=mesagem)
@@ -46,8 +48,11 @@ class Login(Screen):#logar sistema3
     def on_pre_enter(self):
         pass
     def logar(self):
-     
-        login=str(self.ids.login.text).lower().strip()
+        data = {'nome': f'WW', 'idade': 28}
+        self.manager.current = 'Produto'
+        self.manager.get_screen('Produto').atualizar_dados(data)
+        self.manager.transition.direction="left"
+        '''login=str(self.ids.login.text).lower().strip()
         senha=str(self.ids.senha.text).lower().strip()
         conn = sqlite3.connect('app.db')
         cursor = conn.cursor()
@@ -63,7 +68,7 @@ class Login(Screen):#logar sistema3
         else:
             self.menu("usuario incorreto \n ou \n senha")
         self.ids.login.text='' 
-        self.ids.senha.text='' 
+        self.ids.senha.text='' '''
     def set_focus(self, next_field):
         next_field.focus = True    
     def menu(self,text):
@@ -74,8 +79,9 @@ class Login(Screen):#logar sistema3
 class ListaPRoduto(Screen):
         def __init__(self, **kwargs):
             super(ListaPRoduto, self).__init__(**kwargs)
-                        
+            self.vendas_list = MDList()             
         def buscaProduto(self):
+            
             busca=str(self.ids.buscarPRoduto.text).upper()
          
             items=db.select(f"SELECT * FROM estoque WHERE descricao LIKE '%{busca}%' ")            
@@ -89,7 +95,7 @@ class ListaPRoduto(Screen):
                     #list_item = OneLineListItem(text=item[2])
                     self.ids.list_view.add_widget(list_item)
                 
-                list_item.bind(on_release=self.selecionaitem)
+                    list_item.bind(on_release=self.selecionaitem)
         def selecionaitem(self,instance):
             
             def edita():
@@ -170,7 +176,28 @@ class ListaPRoduto(Screen):
             popup = MyPopup()
             popup.atualizar_dados(data=text)
             
- 
+        def adicionaprodutos(self):
+            venda_item = BoxLayout(orientation='horizontal', size_hint_y=None, height=48)
+            busca=str(self.ids.addprodutos.text).upper()
+         
+            items=db.select(f"SELECT * FROM estoque WHERE descricao LIKE '%{busca}%' ")
+            for item in items: 
+                item_label= TwoLineListItem(text=f'CodBarra {item[1]}', secondary_text=f'Descricao {item[2]}',tertiary_text=f'Total R$ {"R$ {:.2f}".format(float(item[3]))}')
+            delete_button = MDIconButton(icon='trash-can-outline', on_release=self.remover_venda)
+            venda_item.add_widget(item_label)
+            venda_item.add_widget(delete_button)
+            self.ids.venda_produto.add_widget(venda_item)
+            self.cacularitens()
+        def remover_venda(self, instance):
+            def removeiten():
+                self.ids.venda_produto.remove_widget(instance.parent)
+                self.cacularitens()
+            popup = MyPopup(removeiten,'DESEJA APAGAR ITEN VENDA')#essa funçao returna confirmaçoa baixa iten class
+            popup.open()
+        def cacularitens(self):
+            item_count = len(self.ids.venda_produto.children)
+            self.ids.quantidaITens.text=f"Quantidade {item_count-1}"     
+
 class vendas(MDApp):
     def build(self):
         DEBUG=1

@@ -5,10 +5,10 @@ from kivy.uix.label import Label
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 class MyPopup(MDDialog):
-    def __init__(self,confirma3=None ,**kwargs):
+    def __init__(self,confirma3=None,MEnsagem=None ,**kwargs):
         self.confirma3 = confirma3
         super(MyPopup, self).__init__(
-            title="Confirmação",
+            title=f"{MEnsagem}",
             text="Deseja continuar?",
             buttons=[
                 MDFlatButton(text="Sim",on_release=self.confirma),
