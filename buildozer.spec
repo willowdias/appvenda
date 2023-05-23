@@ -36,7 +36,7 @@ version = 1.2
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = kivy==master,pymysql,mysql-connector-python, https://github.com/kivymd/KivyMD/archive/master.zip
+requirements = kivy==master,pymysql,mysql-connector-python, https://github.com/kivymd/KivyMD/archive/master.zip,kivymd
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -94,7 +94,9 @@ android.presplash_color = #FFFFFF
 
 # (list) Permissions
 android.permissions = INTERNET
-
+android.permission.WRITE_EXTERNAL_STORAGE
+android.permission.READ_EXTERNAL_STORAGE
+android.permissions.MANAGE_EXTERNAL_STORAGE 
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
 
@@ -175,7 +177,7 @@ android.permissions = INTERNET
 
 # (list) List of Java files to add to the android project (can be java or a
 # directory containing the files)
-#android.add_src =
+android.add_src = kivymd
 
 # (list) Android AAR archives to add
 #android.add_aars =

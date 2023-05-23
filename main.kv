@@ -2,6 +2,7 @@ JanelnaGerenciado:
     Config:
     Login:
     ListaPRoduto:
+    Fotos:
 <Config>
     name:"config"
     MDFloatLayout:
@@ -219,6 +220,8 @@ JanelnaGerenciado:
                 BoxLayout:
                     size_hint: (1, .3)
                     orientation: "horizontal"
+                    padding:10
+                    spacing:15
                     MDRectangleFlatButton:
                         text: "Adicionar Produto"
                         halign: "center"
@@ -228,7 +231,19 @@ JanelnaGerenciado:
                         height: "50dp"
                         pos_hint: {"center_x": 0.5, "center_y": 0.5}
                         on_release:root.adicionarProduto()  
-                            
+                    MDRectangleFlatButton:
+                        text: "adicionar foto"
+                        halign: "center"
+                        text_color: 1, 1, 1, 1
+                        md_bg_color: 0, 0, 2, 1
+                        width: "200dp"
+                        height: "50dp"
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_release:root.SelecionaFotos()    
+                    Image:
+                        id:imagCliente
+                        source: "venda.png"
+                        allow_stretch:True      
         MDBottomNavigationItem:
             name:"estoque"
             text:"Estoque"
@@ -273,7 +288,6 @@ JanelnaGerenciado:
                     do_scroll_y: True
                     bar_width: "8dp"
                     MDList:
-    
                         id: list_view
                         theme_text_color: "Custom"
                         text_color: 1, 1, 0, 1  # Amarelo
@@ -285,8 +299,7 @@ JanelnaGerenciado:
             text:"vendas"
             icon: 'silverware'
             size: root.width, root.height
-            spacing:10
-            padding:15
+            orientation: 'vertical'
             MDTopAppBar:
                 title:"Vendas"
                 #left_action_items:[["menu",lambda x:root.voltatelaprincinpal()]]
@@ -295,51 +308,72 @@ JanelnaGerenciado:
                 elevation:2
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0, 0, 1, 1
-                
+                BoxLayout:
+                    orientation:'horizontal'
+                    MDLabel:
+                        text:"Numero Nota : "
+                        text_color: 1, 1, 1, 1
+                        theme_text_color: "Custom"
+                        halign: "right" 
+             
+                    MDLabel:
+                        text:"Nota"
+                        text_color: 1, 1, 1, 1
+                        theme_text_color: "Custom"
+                        halign: "left" 
+           
             MDCard:
-                orientation: "vertical"
-                padding: "8dp"
+                orientation: 'vertical'
                 size_hint: None, None
-                size: "400dp", "400dp"
-                pos_hint: {"center_x": .5, "center_y": .5}
+                size: '400dp', '400dp'
+                pos_hint: {"center_x": .5, "center_y": .50}
                 #ripple_behavior: True
                 #focus_behavior: True
-                
+                padding:10
                 md_bg_color: self.theme_cls.bg_light
-                MDTextField:
-                    id: addprodutos
-                    hint_text: "Busca produto"
-                    helper_text_mode: "on_focus"
-                    multiline: False  
-                    on_text_validate:
-                        root.adicionaprodutos()
-                
                 BoxLayout:
+                    orientation:'horizontal'
+                    size_hint: 1, None
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    spacing:10
+                    MDTextField:
+                        id: quntproduto
+                        size_hint: None, None
+                        hint_text: "Quant"
+                        input_filter: "float"
+                        helper_text_mode: "on_focus"
+                        multiline: False  
+                        width:50
+                        on_text_validate: root.set_focus(addprodutos)
+                    MDTextField:
+                        id: addprodutos
+                        size_hint: 0, None
+                        width:300
+                        hint_text: "Busca produto"
+                        helper_text_mode: "on_focus"
+                        multiline: False  
+                        on_text_validate:
+                            root.set_focus(addprodutos)
+                            root.adicionaprodutos()
+                
+          
+                ScrollView:
+                    id:telalist
                     orientation:'vertical'
-                    BoxLayout:
-                        id:list
-                        md_bg_color: 0, 0, 2, 1
-                        orientation:'vertical'
-                        size_hint_y:None 
-                        height:100
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        ScrollView:
-                            orientation:'vertical'
-                            size_hint_y: None
-                            height: 300
-                            y: 1
-                            do_scroll_x: False
-                            do_scroll_y: True
-                            bar_width: "8dp"
-                            MDList:
-                                id: venda_produto
-                                theme_text_color: "Custom"
-                                height: "300dp"
-                                spacing: dp(40)
-                                padding: dp(10)
-                                allow_empty_selection: True
-                                GridLayout:
-                                    cols: 1
+                    size_hint_y: None
+                    height: 300
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    bar_width: "8dp"
+                    MDList:
+                        id: venda_produto
+                        theme_text_color: "Custom"
+                        height: "300dp"
+                        spacing: dp(40)
+                        padding: dp(10)
+                        allow_empty_selection: True
+                        GridLayout:
+                            cols: 1
             BoxLayout:
                 orientation: "vertical"
                 padding: "8dp"
@@ -420,3 +454,23 @@ JanelnaGerenciado:
                         font_size: "18sp"
                         on_press: 
                             root.carregardados()
+<Fotos>
+
+    name:"PastaFoto"
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Pasta"
+            left_action_items: [["arrow-left",lambda x:root.menuInicial()]]
+            elevation: 2
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0, 0, 1, 1
+        MDFloatLayout:
+            MDRoundFlatIconButton:
+                text: "Open manager"
+                icon: "folder"
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0, 0, 2, 1
+                pos_hint: {"center_x": .5, "center_y": .5}
+                on_release: root.file_manager_open()

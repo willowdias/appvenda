@@ -40,6 +40,25 @@ class sqlite_db:
         cur.execute('''CREATE TABLE IF NOT EXISTS 
             estoque (id INTEGER PRIMARY KEY, codigo varchar(200),
             descricao varchar(200),quant int, vl_custo NUMERIC,vl_venda NUMERIC)''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS 
+            orca (id INTEGER PRIMARY KEY,
+            nota int ,
+            cod_cliente int,
+            nome_cliente varchar(200),
+            qt_itens NUMERIC,
+            vl_total NUMERIC
+            )
+            ''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS 
+            orcas (
+            id INTEGER PRIMARY KEY,
+            nota int ,
+            descricao varchar(200),
+            qt_itens NUMERIC,
+            vl_custo NUMERIC,
+            vl_total NUMERIC
+            )
+            ''')
     def exporta(self):
         nome_tabela = 'usuario'
         registros=db.select(f"SELECT * FROM {nome_tabela}")

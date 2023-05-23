@@ -7,11 +7,11 @@ from kivymd.uix.list import OneLineListItem, MDList
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.list import TwoLineListItem, MDList
 from kivy.uix.popup import Popup
-from kivy.core.window import Window
+from kivymd.uix.button import MDRaisedButton
+
 from kivy.properties import*
-import socket
-import mysql.connector
-import configparser
+from kivymd.uix.button import MDFloatingActionButton
+from kivy.uix.image import Image
 from kivy.config import ConfigParser
 import os,sys
 from kivymd.uix.button import MDFlatButton, MDIconButton
@@ -19,10 +19,19 @@ from kivymd.uix.button import MDFlatButton, MDIconButton
 from kivymd.uix.dialog import MDDialog
 from query import*
 from messagem import*
-
+from fotoaquivo import*
 from bd import*
+from kivy import platform
+from kivy.utils import platform
+
+from kivy import platform
+if platform == "android":
+    from android.permissions import request_permissions, Permission
+    request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, 
+Permission.READ_EXTERNAL_STORAGE])
 class JanelnaGerenciado(ScreenManager):
     pass
+
 class Config(Screen):
     pass
 
@@ -79,7 +88,8 @@ class Login(Screen):#logar sistema3
 class ListaPRoduto(Screen):
         def __init__(self, **kwargs):
             super(ListaPRoduto, self).__init__(**kwargs)
-            self.vendas_list = MDList()             
+            self.items=[] 
+              
         def buscaProduto(self):
             
             busca=str(self.ids.buscarPRoduto.text).upper()
@@ -106,6 +116,11 @@ class ListaPRoduto(Screen):
 
         def update_database(self):
             self.ids.list_view.selection = [0].text
+        def fotoSelecionada(self,data):
+            self.ids.imagCliente.source=data
+        def SelecionaFotos(self):
+            self.manager.current = 'PastaFoto'
+            self.manager.transition.direction="left"
         def valquant(self):#essa funçaomuda numero inteiro pra float
             quant=self.ids.quant.text
             self.ids.quant.text="{:.2f}".format(float(quant))
@@ -126,8 +141,6 @@ class ListaPRoduto(Screen):
             quant=self.ids.quant.text
             vlcusto=self.ids.vlcusto.text
             vlvendas=self.ids.vlvendas.text
-            conn = sqlite3.connect('app.db')
-            cursor = conn.cursor()
             while True:
                 if codigo=='':
                     self.ids.codigoproduto.focus = True
@@ -177,27 +190,56 @@ class ListaPRoduto(Screen):
             popup.atualizar_dados(data=text)
             
         def adicionaprodutos(self):
-            venda_item = BoxLayout(orientation='horizontal', size_hint_y=None, height=48)
+            venda_items = BoxLayout(orientation='horizontal', size_hint_y=None, height=48,spacing=10)
             busca=str(self.ids.addprodutos.text).upper()
-         
+            
+
             items=db.select(f"SELECT * FROM estoque WHERE descricao LIKE '%{busca}%' ")
-            for item in items: 
-                item_label= TwoLineListItem(text=f'CodBarra {item[1]}', secondary_text=f'Descricao {item[2]}',tertiary_text=f'Total R$ {"R$ {:.2f}".format(float(item[3]))}')
-            delete_button = MDIconButton(icon='trash-can-outline', on_release=self.remover_venda)
-            venda_item.add_widget(item_label)
-            venda_item.add_widget(delete_button)
-            self.ids.venda_produto.add_widget(venda_item)
+            if busca=='':
+                pass
+            
+            else:
+                for item in items: 
+                    item_label= TwoLineListItem(text=f'Codigo {item[1]}', secondary_text=f'Descricao {item[2]}',tertiary_text=f'Total R$ {"R$ {:.2f}".format(float(item[4]))}')
+                    
+
+            try:
+                self.items.append({"valor":item[4]})
+                imagens=Image(source='venda.png',size_hint_x=0.3)
+                idlb=MDFloatingActionButton(icon='pencil')
+                delete_button = MDFloatingActionButton(icon=f'trash-can-outline',on_release=self.remover_venda)
+                delete_button.item_text = item_label.text
+                
+                    
+                venda_items.add_widget(imagens)
+                
+                venda_items.add_widget(item_label)
+                venda_items.add_widget(idlb)
+                venda_items.add_widget(delete_button)
+                self.ids.venda_produto.add_widget(venda_items)
+                #item_label.bind(on_release=self.remover_venda)
+            except: errorcode  
             self.cacularitens()
+       
         def remover_venda(self, instance):
+            item_text = instance.item_text
+            print(item_text)
             def removeiten():
                 self.ids.venda_produto.remove_widget(instance.parent)
                 self.cacularitens()
-            popup = MyPopup(removeiten,'DESEJA APAGAR ITEN VENDA')#essa funçao returna confirmaçoa baixa iten class
+            popup = MyPopup(removeiten,'DESEJA APAGAR ITEM VENDA')#essa funçao returna confirmaçoa baixa iten class
             popup.open()
         def cacularitens(self):
+            total = 0
+            for item in self.items:
+                total += item["valor"]
+            self.ids.VAlortotalvenda.text=f'Total R$ {"R$ {:.2f}".format(total)}'
+            
             item_count = len(self.ids.venda_produto.children)
             self.ids.quantidaITens.text=f"Quantidade {item_count-1}"     
-
+        #foca objeto
+        def set_focus(self, next_field):
+            next_field.focus = True    
 class vendas(MDApp):
     def build(self):
         DEBUG=1
@@ -207,5 +249,6 @@ class vendas(MDApp):
         
         return Builder.load_file('main.kv')
     
+ 
 if __name__ == '__main__':
     vendas().run()
