@@ -25,10 +25,7 @@ from kivy import platform
 from kivy.utils import platform
 
 from kivy import platform
-if platform == "android":
-    from android.permissions import request_permissions, Permission
-    request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, 
-Permission.READ_EXTERNAL_STORAGE])
+
 class JanelnaGerenciado(ScreenManager):
     pass
 
@@ -246,7 +243,9 @@ class vendas(MDApp):
         Window.size = (400, 600) 
         
         db.criaTabela()
-        
+        if platform == "android":
+            from android.permissions import Permission,request_permissions
+            request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
         return Builder.load_file('main.kv')
     
  

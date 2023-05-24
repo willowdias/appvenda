@@ -5,6 +5,8 @@ from kivy.core.window import Window
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.toast import toast
 from kivy.uix.screenmanager import Screen,ScreenManager
+from kivy.utils import platform
+
 class Fotos(Screen):
     
     def __init__(self, **kwargs):
@@ -18,9 +20,13 @@ class Fotos(Screen):
 
         #exit_manager=self.exit_manager, select_path=self.select_path
     def file_manager_open(self):
+        if platform == "andriod":
+            from android.permissions import Permission,request_permissions
+            request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
+            
         self.file_manager.show(os.path.expanduser("~"))  # output manager to the screen
         #self.manager_open = True
-
+        
     def select_path(self, path: str):
         
         print(path)
